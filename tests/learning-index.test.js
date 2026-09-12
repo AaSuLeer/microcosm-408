@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict';
+import {createLearningIndex,searchLearning,ancestorKeys,decodeProgress} from '../src/learning-index.js';
+const entries=createLearningIndex();
+const result=searchLearning(entries,{query:'流水线 LOAD-use',priorityOnly:true});
+assert.ok(result.length>0);assert.ok(result.every(e=>e.priority&&e.chapter.startsWith('05')));
+assert.equal(searchLearning(entries,{query:'不存在的知识词条xyz'}).length,0);
+assert.ok(searchLearning(entries,{chapter:entries[0].chapter}).every(e=>e.chapter===entries[0].chapter));
+assert.deepEqual(ancestorKeys('4-5-1-1'),['4','4-5','4-5-1']);
+assert.deepEqual(decodeProgress('{bad',entries),[]);
+assert.deepEqual(decodeProgress(JSON.stringify({version:1,completed:[entries[0].key,entries[0].key,'unknown']}),entries),[entries[0].key]);
+assert.equal(searchLearning(entries,{completedOnly:true,completed:[entries[0].key]}).length,1);
+const {learningResources}=await import('../src/learning-index.js');
+const resources=learningResources(entries,'4-5-1-1-2');
+assert.ok(resources.notes.some(e=>e.title.includes('MEM')));
+assert.ok(resources.experiments.some(e=>e.link==='pipeline'));
+assert.ok(learningResources(entries,'0-1').examples.length>0);

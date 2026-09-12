@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="760" viewBox="0 0 1440 760" role="img" aria-labelledby="title desc">
+  <title id="title">Microcosm 408 功能总览</title>
+  <desc id="desc">从整机三维硬件场景进入二维教材原理图、逐步动画、知识图谱和考点追踪。</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#0d1a26"/><stop offset="1" stop-color="#17343a"/></linearGradient>
+    <linearGradient id="card" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#173441"/><stop offset="1" stop-color="#102630"/></linearGradient>
+    <filter id="shadow"><feDropShadow dx="0" dy="12" stdDeviation="18" flood-color="#061017" flood-opacity=".55"/></filter>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#68c7bb"/></marker>
+  </defs>
+  <rect width="1440" height="760" rx="30" fill="url(#bg)"/>
+  <circle cx="1295" cy="80" r="210" fill="#24796c" opacity=".13"/><circle cx="105" cy="725" r="260" fill="#3182a0" opacity=".12"/>
+  <text x="72" y="86" fill="#8ed9cd" font-family="system-ui,sans-serif" font-size="20" font-weight="700" letter-spacing="5">MICROCOSM / 408</text>
+  <text x="72" y="146" fill="#f4f7ef" font-family="system-ui,sans-serif" font-size="48" font-weight="750">把计算机组成原理变成可操作的机器</text>
+  <text x="72" y="190" fill="#abc1c5" font-family="system-ui,sans-serif" font-size="23">3D 看空间结构 · 2D 看数据通路 · 动画看每一步 · 图谱串联考点</text>
+
+  <g filter="url(#shadow)">
+    <rect x="72" y="250" width="292" height="350" rx="22" fill="url(#card)" stroke="#35646d"/>
+    <rect x="392" y="250" width="292" height="350" rx="22" fill="url(#card)" stroke="#35646d"/>
+    <rect x="712" y="250" width="292" height="350" rx="22" fill="url(#card)" stroke="#35646d"/>
+    <rect x="1032" y="250" width="336" height="350" rx="22" fill="url(#card)" stroke="#35646d"/>
+  </g>
+
+  <g font-family="system-ui,sans-serif">
+    <text x="102" y="302" fill="#68c7bb" font-size="18" font-weight="700">01 · 整机 3D</text>
+    <g transform="translate(110 345)">
+      <rect x="0" y="0" width="215" height="128" rx="15" fill="#173f43" stroke="#68c7bb" stroke-width="2"/>
+      <rect x="31" y="31" width="76" height="64" rx="8" fill="#2c6c67" stroke="#b7ead4"/>
+      <path d="M39 24V12M55 24V12M71 24V12M87 24V12M103 24V12M39 114V102M55 114V102M71 114V102M87 114V102M103 114V102" stroke="#d3b86d" stroke-width="5"/>
+      <rect x="130" y="27" width="58" height="18" rx="4" fill="#5f8e83"/><rect x="130" y="55" width="58" height="18" rx="4" fill="#5f8e83"/><rect x="130" y="83" width="58" height="18" rx="4" fill="#5f8e83"/>
+    </g>
+    <text x="102" y="520" fill="#eef5ef" font-size="20" font-weight="650">CPU · 内存 · DMA · 磁盘</text>
+    <text x="102" y="554" fill="#a9bec2" font-size="17">拖动、旋转、缩放和点击下钻</text>
+
+    <text x="422" y="302" fill="#68c7bb" font-size="18" font-weight="700">02 · 教材式 SVG</text>
+    <path d="M440 356H507V388H552V356H621L598 446H463Z" fill="#244a50" stroke="#9bd7cd" stroke-width="3"/>
+    <text x="530" y="416" fill="#f4f7ef" font-size="23" text-anchor="middle" font-weight="700">ALU</text>
+    <path d="M470 484H594" stroke="#68c7bb" stroke-width="4" marker-end="url(#arrow)"/>
+    <circle cx="470" cy="484" r="10" fill="#e8bd68"/><circle cx="534" cy="484" r="10" fill="#e8bd68"/>
+    <text x="422" y="520" fill="#eef5ef" font-size="20" font-weight="650">位格 · 总线 · 控制信号</text>
+    <text x="422" y="554" fill="#a9bec2" font-size="17">与当前仿真步骤同步高亮</text>
+
+    <text x="742" y="302" fill="#68c7bb" font-size="18" font-weight="700">03 · 逐步动画</text>
+    <g transform="translate(750 350)">
+      <rect x="0" y="0" width="52" height="52" rx="8" fill="#f2cc75"/><rect x="62" y="0" width="52" height="52" rx="8" fill="#244a50" stroke="#68c7bb"/><rect x="124" y="0" width="52" height="52" rx="8" fill="#244a50" stroke="#68c7bb"/>
+      <text x="26" y="35" text-anchor="middle" fill="#17262b" font-size="24" font-weight="700">1</text><text x="88" y="35" text-anchor="middle" fill="#eef5ef" font-size="24">0</text><text x="150" y="35" text-anchor="middle" fill="#eef5ef" font-size="24">1</text>
+      <path d="M0 92H177" stroke="#68c7bb" stroke-width="4" marker-end="url(#arrow)"/>
+      <rect x="32" y="126" width="151" height="54" rx="12" fill="#1d5d57"/><text x="108" y="160" text-anchor="middle" fill="#f4f7ef" font-size="18">试减 → 恢复 → 写商</text>
+    </g>
+    <text x="742" y="554" fill="#a9bec2" font-size="17">选位、运算、移位、写回都可追踪</text>
+
+    <text x="1062" y="302" fill="#68c7bb" font-size="18" font-weight="700">04 · 考研知识图谱</text>
+    <g fill="none" stroke="#68c7bb" stroke-width="3">
+      <path d="M1197 346V492M1197 382H1111M1197 416H1284M1197 458H1111M1197 492H1284"/>
+    </g>
+    <g fill="#173f43" stroke="#8ed9cd"><rect x="1080" y="361" width="111" height="42" rx="10"/><rect x="1204" y="395" width="120" height="42" rx="10"/><rect x="1072" y="437" width="119" height="42" rx="10"/><rect x="1204" y="471" width="120" height="42" rx="10"/></g>
+    <g fill="#eef5ef" font-size="16" text-anchor="middle"><text x="1135" y="388">指令系统</text><text x="1264" y="422">中央处理器</text><text x="1131" y="464">存储系统</text><text x="1264" y="498">总线与 I/O</text></g>
+    <text x="1062" y="554" fill="#a9bec2" font-size="17">重点、公式、易错点与实验入口</text>
+  </g>
+
+  <g font-family="system-ui,sans-serif" font-size="16" fill="#8da8ad"><text x="72" y="688">本地运行 · 无账号 · 无后端 · Three.js + SVG + KaTeX</text><text x="1368" y="688" text-anchor="end">v2 · 教学仿真</text></g>
+</svg>

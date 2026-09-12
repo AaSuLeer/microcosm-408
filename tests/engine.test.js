@@ -1,0 +1,12 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {add8,multiplySteps,divideSteps,translate,cacheAccess,assemble,initial,tick} from '../src/engine.js';
+const signed=x=>x>127?x-256:x;
+test('穷举 8 位加减法结果和全部标志',()=>{for(let a=0;a<256;a++)for(let b=0;b<256;b++)for(const sub of [false,true]){const r=add8(a,b,sub),value=sub?a-b:a+b,sv=sub?signed(a)-signed(b):signed(a)+signed(b);assert.equal(r.value,((value%256)+256)%256);assert.equal(r.CF,+(sub?a<b:value>255));assert.equal(r.OF,+(sv< -128||sv>127));assert.equal(r.ZF,+(r.value===0));assert.equal(r.SF,+(r.value>=128));}});
+test('无符号乘除法穷举最终状态',()=>{for(let a=0;a<256;a++)for(let b=0;b<256;b++){assert.equal(multiplySteps(a,b).at(-1).acc,a*b);if(b){const r=divideSteps(a,b).at(-1);assert.equal(r.quotient,Math.floor(a/b));assert.equal(r.remainder,a%b);}}assert.throws(()=>divideSteps(1,0));});
+test('示例程序通过实际取指运行，输出 12',()=>{let s=initial();const before=structuredClone(s);for(let i=0;i<42;i++)s=tick(s);assert.equal(s.halted,true);assert.deepEqual(s.output,[12]);assert.equal(s.mem[128],12);assert.deepEqual(s.regs,[12,5,12,0]);assert.equal(s.retired,7);assert.equal(s.clock,42);assert.deepEqual(before,initial());assert.equal(tick(s),s);});
+test('条件循环与减法，分支到字节地址',()=>{let s=initial(assemble('LDI R0, 3\nLDI R1, 1\nSUB R0, R1\nJNZ R0, 4\nOUT R0\nHALT'));for(let i=0;i<100&&!s.halted;i++)s=tick(s);assert.equal(s.halted,true);assert.deepEqual(s.output,[0]);assert.equal(s.retired,10);});
+test('自修改代码从主存译码，非法操作码停止',()=>{let s=initial(assemble('LDI R0, 0\nSTORE R0, 4\nHALT'));for(let i=0;i<30&&!s.halted;i++)s=tick(s);assert.match(s.note,/非法操作码/);});
+test('汇编器拒绝越界和错误格式',()=>{for(const p of ['LDI R4, 1','ADD R0, 8','LOAD R0, 256','HALT R0','JNZ R0, 1','JNZ R0, 10','OUT','XXX'])assert.throws(()=>assemble(p),p);});
+test('Cache 空行未命中、同块命中和冲突替换',()=>{let r=cacheAccess([null,null,null,null],0);assert.equal(r.hit,false);r=cacheAccess(r.cache,3);assert.equal(r.hit,true);r=cacheAccess(r.cache,16);assert.equal(r.hit,false);assert.equal(r.index,0);assert.equal(r.tag,1);assert.equal(cacheAccess(r.cache,0).hit,false);});
+test('页表查询、TLB 命中与缺页独立判断',()=>{const table=[3,1,5,null];assert.deepEqual(translate(530,table),{vpn:2,offset:18,hit:false,fault:false,frame:5,pa:1298});assert.equal(translate(530,table,{2:5}).hit,true);assert.equal(translate(800,table).fault,true);assert.equal(translate(255,table).pa,1023);assert.equal(translate(256,table).pa,256);});

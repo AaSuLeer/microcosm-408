@@ -1,0 +1,14 @@
+import {Marked} from 'marked';
+import katex from 'katex';
+const escape=s=>String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
+const parser=new Marked({gfm:true,breaks:true,renderer:{html:token=>escape(token.text),link(token){const href=token.href??'';return /^(https?:\/\/|#|\/)/.test(href)?`<a href="${escape(href)}" target="_blank" rel="noreferrer">${escape(token.text)}</a>`:escape(token.text);}}});
+/** Local educational prose. Raw HTML and unsafe links are never executed. */
+export function renderProse(markdown){const math=[];const source=String(markdown).replace(/\$\$([\s\S]+?)\$\$|\$([^$\n]+?)\$/g,(_,block,inline)=>{const index=math.length;math.push(katex.renderToString(block??inline,{displayMode:block!==undefined,throwOnError:false,trust:false,strict:'ignore',output:'htmlAndMathml'}));return `MATHSLOT${index}END`;});let html=parser.parse(source);math.forEach((value,i)=>html=html.replaceAll(`MATHSLOT${i}END`,value));return html;}
+export function lesson(page,p,f){const equations={
+isa:isaEquation(p),control:String.raw`\text{控制信号}=f(\text{操作码},T,\text{条件})`,pipeline:String.raw`CPI=\frac{\text{总时钟数}}{\text{完成指令数}}`,interrupts:String.raw`\text{响应}=IRQ\land IF\land\neg MASK`,multiplier:String.raw`P_{i+1}=P_i+Q_i[0]\cdot M_i`,divider:String.raw`\begin{gathered}T=2R+a_{7-i}-B\\Q_i=\begin{cases}1&T\ge0\\0&T<0\end{cases}\end{gathered}`,adder:String.raw`S_i=A_i\oplus B_i\oplus C_i`,memory:String.raw`\text{容量}=\text{芯片数}\times\text{每片字数}\times\text{每字位数}`,disk:String.raw`\mathrm{LBA}=(C\times6+H)\times12+S`,paging:String.raw`\mathrm{PA}=\mathrm{PFN}\times256+\mathrm{offset}`,cpu:String.raw`\mathrm{PC}\to\mathrm{MAR},\quad M[\mathrm{MAR}]\to\mathrm{MDR}`,io:String.raw`\mathrm{ADDR}\gets\mathrm{ADDR}+1,\quad\mathrm{COUNT}\gets\mathrm{COUNT}-1`,system:String.raw`\text{外设}\to\text{接口缓冲}\to\text{主存}`,flipflop:String.raw`Q^+=\begin{cases}D&\mathrm{CLK}\uparrow\ \land\ \mathrm{EN}=1\\Q&\text{其他情况}\end{cases}`};const eq=page==='io'&&p.ioMode!=='dma'?String.raw`\mathrm{Select}=\mathrm{Decode}(A)\land(\mathrm{RD}\ \text{或}\ \mathrm{WR})`:equations[page];return renderProse(`### ${f.title}\n\n${f.note}\n\n**对应关系**\n\n$$${eq}$$`);}
+
+function isaEquation(p){
+ if(p.isaTopic==='call')return String.raw`\mathrm{CALL}:\text{保存返回地址},\quad\mathrm{RET}:PC\gets\text{返回地址}`;
+ if(p.isaTopic==='branch')return String.raw`ZF=1\Rightarrow PC\gets PC_{next}+\operatorname{sext}(A)`;
+ return {immediate:String.raw`\text{操作数}=A`,direct:String.raw`EA=A,\quad\text{操作数}=M[EA]`,indirect:String.raw`EA=M[A],\quad\text{操作数}=M[EA]`,register:String.raw`\text{操作数}=R`,registerIndirect:String.raw`EA=R,\quad\text{操作数}=M[EA]`,base:String.raw`EA=R_b+\operatorname{sext}(A)`,index:String.raw`EA=A+R_i`,relative:String.raw`EA=PC_{next}+\operatorname{sext}(A)`}[p.isaMode];
+}
